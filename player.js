@@ -1,42 +1,45 @@
-let ak = require('arcade_keys');
-let assets = require('./assets');
+let ak      = require('arcade_keys');
+let assets  = require('./assets');
+let globals = require('./globals');
 
 class Player {
   constructor(keys) {
-    this.currentInterval = 0;
-    this.currentState = 'down';
-    this.currentStep  = 0;
-    this.x = 100;
-    this.y = 10;
-    this.numberOfSteps = 2;
-    this.scale = 2;
+    this.x                 = 100;
+    this.y                 = 10;
+    this.scale             = globals.scale;
+    this.currentStep       = 0;
+    this.currentState      = 'down';
+    this.numberOfSteps     = 2;
+    this.speedPerSecond    = 100;
+    this.currentInterval   = 0;
+    this.maxIntervalLength = 200;
   }
 
   incrementInterval(dt) {
     this.currentInterval += (dt * 1000);
 
-    if (this.currentInterval > 200) {
+    if (this.currentInterval > this.maxIntervalLength) {
       this.currentInterval = 0;
       this.currentStep = (this.currentStep + 1) % this.numberOfSteps;
     }
   }
 
   move(dt) {
-    let value = 100 * dt;
+    let value = this.speedPerSecond * dt;
     let angledValue = 0.5 * value * Math.sqrt(2);
 
     if (this.currentState == 'up') {
-      this.y -= value;
+      this.x -= value; this.y -= value;
     } else if (this.currentState == 'left') {
       this.x -= value;
     } else if (this.currentState == 'right') {
       this.x += value;
     } else if (this.currentState == 'down-right') {
-      this.x += angledValue; this.y += angledValue;
+      this.x += 2*angledValue; this.y += angledValue;
     } else if (this.currentState == 'down-left') {
-      this.x -= angledValue; this.y += angledValue;
+      this.y += angledValue;
     } else {
-      this.y += value;
+      this.x += value; this.y += value;
     }
   }
 
