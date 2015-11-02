@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "watchify -t babelify game.js -o game.bundle.js",
-    "build": "browserify -t babelify game.js -o game.bundle.js"
+    "build": "browserify -t babelify game.js -o game.bundle.js",
+    "postinstall": "npm run build",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
