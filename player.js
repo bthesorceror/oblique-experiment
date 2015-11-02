@@ -130,7 +130,6 @@ class Player {
     renderer.render(() => {
       let translation =
         renderer.translation(this.x, 0, this.z);
-      console.dir(translation);
       renderer.translate(translation.x, translation.y)
       renderer.drawImage(
         this.image,
