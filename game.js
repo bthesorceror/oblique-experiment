@@ -16,6 +16,7 @@ class Game {
     this.player = new Player();
     this.cubes  = [];
     this.cubes.push(new Cube(100, 100, 100, 20, 20, 20));
+    this.tileSize = 10;
 
     this.player.on('fire', (player) => {
       this.addFallingCube(player.x, player.z);
@@ -36,7 +37,6 @@ class Game {
     this.clearScreen(renderer);
     this.player.draw(renderer);
 
-    // Draw user location
     renderer.drawTextAt(
       30, 30,
       `x: ${this.player.x} z: ${this.player.z}`,

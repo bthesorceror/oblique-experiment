@@ -5,6 +5,7 @@ All commands assume `./node_modules/.bin/` is in your path
 
 ## build
 ```
+npm install
 npm run build
 ```
 
