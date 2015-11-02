@@ -14,7 +14,7 @@ class Game {
     this.height = height;
     this.player = new Player();
     this.cubes  = [];
-    this.cubes.push(new Cube(100, 100, 20, 20, 20));
+    this.cubes.push(new Cube(100, 100, 100, 20, 20, 20));
   }
 
   clearScreen(renderer) {

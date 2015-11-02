@@ -22,8 +22,9 @@ function renderSide(renderer, points, color) {
 }
 
 class Cube {
-  constructor(x, z, width, height, depth) {
+  constructor(x, y, z, width, height, depth) {
     this.x      = x;
+    this.y      = y;
     this.z      = z;
     this.height = height;
     this.width  = width;
@@ -38,22 +39,22 @@ class Cube {
     let points1 = [
     {
       x: this.x - this.width/2,
-      y: 0,
+      y: this.y + 0,
       z: this.z - this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: 0,
+      y: this.y + 0,
       z: this.z - this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z - this.depth/2
     },
     {
       x: this.x - this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z - this.depth/2
     }
     ];
@@ -62,22 +63,22 @@ class Cube {
     let points2 = [
     {
       x: this.x + this.width/2,
-      y: 0,
+      y: this.y + 0,
       z: this.z - this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z - this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z + this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: 0,
+      y: this.y + 0,
       z: this.z + this.depth/2
     }
     ];
@@ -86,22 +87,22 @@ class Cube {
     let points3 = [
     {
       x: this.x - this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z - this.depth/2
     },
     {
       x: this.x - this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z + this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z + this.depth/2
     },
     {
       x: this.x + this.width/2,
-      y: this.height,
+      y: this.y + this.height,
       z: this.z - this.depth/2
     }
     ];
