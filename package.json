@@ -16,6 +16,7 @@
     "babelify": "^6.4.0",
     "browserify": "^11.2.0",
     "gameloop": "^0.3.2",
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "watchify": "^3.6.0"
   }
 }
