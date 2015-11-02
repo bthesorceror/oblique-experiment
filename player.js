@@ -1,9 +1,11 @@
-let ak      = require('arcade_keys');
-let assets  = require('./assets');
-let globals = require('./globals');
+let ak           = require('arcade_keys');
+let assets       = require('./assets');
+let globals      = require('./globals');
+let EventEmitter = require('events').EventEmitter;
 
-class Player {
+class Player extends EventEmitter {
   constructor() {
+    super();
     this.x                 = 500;
     this.z                 = 500;
     this.scale             = globals.scale;
@@ -13,6 +15,7 @@ class Player {
     this.speedPerSecond    = 200;
     this.currentInterval   = 0;
     this.maxIntervalLength = 200;
+    this.fireLimiter       = 0;
   }
 
   incrementInterval(dt) {
@@ -42,13 +45,21 @@ class Player {
       this.x += angledValue * 4; this.z -= value * 2;
     } else if (this.currentState == 'down-left') {
       this.z -= value * 2;
-    } else {
+    } else if (this.currentState == 'down') {
       this.x += angledValue * 2; this.z -= value * 2;
     }
   }
 
   update(dt, keys) {
     let pressed = true;
+
+    this.fireLimiter += dt;
+    if (keys.isPressed(ak.keys.space)) {
+      if (this.fireLimiter > .45) {
+        this.fireLimiter = 0;
+        this.emit('fire', this);
+      }
+    }
 
     if (keys.isPressed(ak.keys.down) &&
         keys.isPressed(ak.keys.right)) {

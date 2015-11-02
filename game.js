@@ -16,7 +16,14 @@ class Game {
     this.player = new Player();
     this.cubes  = [];
     this.cubes.push(new Cube(100, 100, 100, 20, 20, 20));
-    this.cubes.push(new FallingCube(200, 100, 200, 20, 20, 20));
+
+    this.player.on('fire', (player) => {
+      this.addFallingCube(player.x, player.z);
+    });
+  }
+
+  addFallingCube(x, z) {
+    this.cubes.push(new FallingCube(x, 200, z, 20, 20, 20));
   }
 
   clearScreen(renderer) {
@@ -58,11 +65,14 @@ function startGame() {
 
   $body.append($canvas);
 
-  let keys   = ak([
-      ak.keys.up,
-      ak.keys.down,
-      ak.keys.right,
-      ak.keys.left]);
+  let keys = ak([
+    ak.keys.up,
+    ak.keys.down,
+    ak.keys.right,
+    ak.keys.left,
+    ak.keys.space
+  ]);
+
   let game = new Game(1000, 1000);
 
   let context = $canvas[0].getContext('2d');
