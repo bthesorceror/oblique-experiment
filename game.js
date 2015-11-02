@@ -3,10 +3,11 @@ let GameLoop = require('gameloop');
 let as       = require('async');
 let ak       = require('arcade_keys');
 
-let assets   = require('./assets');
-let Player   = require('./player')
-let Renderer = require('./renderer');
-let Cube     = require('./cube');
+let assets      = require('./assets');
+let Player      = require('./player')
+let Renderer    = require('./renderer');
+let Cube        = require('./cube');
+let FallingCube = require('./falling_cube');
 
 class Game {
   constructor(width, height) {
@@ -15,6 +16,7 @@ class Game {
     this.player = new Player();
     this.cubes  = [];
     this.cubes.push(new Cube(100, 100, 100, 20, 20, 20));
+    this.cubes.push(new FallingCube(200, 100, 200, 20, 20, 20));
   }
 
   clearScreen(renderer) {
@@ -40,6 +42,9 @@ class Game {
 
   update(delta, keys) {
     this.player.update(delta, keys);
+    this.cubes.forEach((cube) => {
+      cube.update(delta, keys);
+    });
   }
 }
 

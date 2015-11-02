@@ -32,7 +32,7 @@ class Cube {
   }
 
   update(delta, keys) {
-    console.log('updating cube');
+    // NO-OP
   }
 
   draw(renderer) {
