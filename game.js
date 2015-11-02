@@ -7,11 +7,122 @@ let assets   = require('./assets');
 let Player   = require('./player')
 let Renderer = require('./renderer');
 
+class Cube {
+  constructor(x, z, width, height, depth) {
+    this.x      = x;
+    this.z      = z;
+    this.height = height;
+    this.width  = width;
+    this.depth  = depth;
+  }
+
+  update(delta, keys) {
+    console.log('updating cube');
+  }
+
+  draw(renderer) {
+    renderer.render(() => {
+      renderer.context.fillStyle = '#F00';
+      renderer.beginPath();
+      [
+        renderer.translation(
+          this.x - this.width/2,
+          0,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          0,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          this.height,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x - this.width/2,
+          this.height,
+          this.z - this.depth/2)
+      ].forEach((pos, idx) => {
+        if (idx == 0) {
+          return renderer.moveTo(pos.x, pos.y);
+        }
+
+        renderer.lineTo(pos.x, pos.y);
+      });
+      renderer.closePath();
+      renderer.fill();
+    });
+
+    renderer.render(() => {
+      renderer.context.fillStyle = '#FF0';
+      renderer.beginPath();
+      [
+        renderer.translation(
+          this.x + this.width/2,
+          0,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          this.height,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          this.height,
+          this.z + this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          0,
+          this.z + this.depth/2)
+      ].forEach((pos, idx) => {
+        if (idx == 0) {
+          return renderer.moveTo(pos.x, pos.y);
+        }
+
+        renderer.lineTo(pos.x, pos.y);
+      });
+      renderer.closePath();
+      renderer.fill();
+    });
+
+    renderer.render(() => {
+      renderer.context.fillStyle = '#0F0';
+      renderer.beginPath();
+      [
+        renderer.translation(
+          this.x - this.width/2,
+          this.height,
+          this.z - this.depth/2),
+        renderer.translation(
+          this.x - this.width/2,
+          this.height,
+          this.z + this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          this.height,
+          this.z + this.depth/2),
+        renderer.translation(
+          this.x + this.width/2,
+          this.height,
+          this.z - this.depth/2)
+      ].forEach((pos, idx) => {
+        if (idx == 0) {
+          return renderer.moveTo(pos.x, pos.y);
+        }
+
+        renderer.lineTo(pos.x, pos.y);
+      });
+      renderer.closePath();
+      renderer.fill();
+    });
+  }
+}
+
 class Game {
   constructor(width, height) {
-    this.width = width;
+    this.width  = width;
     this.height = height;
     this.player = new Player();
+    this.cubes  = [];
+    this.cubes.push(new Cube(100, 100, 20, 20, 20));
   }
 
   clearScreen(renderer) {
@@ -27,8 +138,12 @@ class Game {
     // Draw user location
     renderer.drawTextAt(
       30, 30,
-      `x: ${this.player.x} y: ${this.player.y}`,
+      `x: ${this.player.x} z: ${this.player.z}`,
       { font: "20px Verdana"});
+
+    this.cubes.forEach((cube) => {
+      cube.draw(renderer);
+    });
   }
 
   update(delta, keys) {
@@ -40,8 +155,8 @@ function startGame() {
   let $body = $('body');
   let $canvas = $('<canvas />');
 
-  $canvas.attr('height', 800);
-  $canvas.attr('width', 1200);
+  $canvas.attr('height', 1000);
+  $canvas.attr('width', 1000);
   $canvas.css('background-color', 'green');
 
   $body.append($canvas);
@@ -51,7 +166,7 @@ function startGame() {
       ak.keys.down,
       ak.keys.right,
       ak.keys.left]);
-  let game = new Game(1200, 800);
+  let game = new Game(1000, 1000);
 
   let context = $canvas[0].getContext('2d');
 

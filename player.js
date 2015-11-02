@@ -3,14 +3,14 @@ let assets  = require('./assets');
 let globals = require('./globals');
 
 class Player {
-  constructor(keys) {
-    this.x                 = 100;
-    this.y                 = 10;
+  constructor() {
+    this.x                 = 500;
+    this.z                 = 500;
     this.scale             = globals.scale;
     this.currentStep       = 0;
     this.currentState      = 'down';
     this.numberOfSteps     = 2;
-    this.speedPerSecond    = 100;
+    this.speedPerSecond    = 200;
     this.currentInterval   = 0;
     this.maxIntervalLength = 200;
   }
@@ -26,20 +26,24 @@ class Player {
 
   move(dt) {
     let value = this.speedPerSecond * dt;
-    let angledValue = 0.5 * value * Math.sqrt(2);
+    let angledValue = 0.5 * value * Math.cos(0.785398);
 
     if (this.currentState == 'up') {
-      this.x -= value; this.y -= value;
+      this.x -= angledValue * 2; this.z += value * 2;
+    } else if (this.currentState == 'up-right') {
+      this.z += value * 2;
+    } else if (this.currentState == 'up-left') {
+      this.x -= angledValue * 4; this.z += value * 2;
     } else if (this.currentState == 'left') {
       this.x -= value;
     } else if (this.currentState == 'right') {
       this.x += value;
     } else if (this.currentState == 'down-right') {
-      this.x += 2*angledValue; this.y += angledValue;
+      this.x += angledValue * 4; this.z -= value * 2;
     } else if (this.currentState == 'down-left') {
-      this.y += angledValue;
+      this.z -= value * 2;
     } else {
-      this.x += value; this.y += value;
+      this.x += angledValue * 2; this.z -= value * 2;
     }
   }
 
@@ -52,6 +56,12 @@ class Player {
     } else if (keys.isPressed(ak.keys.down) &&
         keys.isPressed(ak.keys.left)) {
       this.currentState = 'down-left';
+    } else if (keys.isPressed(ak.keys.up) &&
+        keys.isPressed(ak.keys.left)) {
+      this.currentState = 'up-left';
+    } else if (keys.isPressed(ak.keys.up) &&
+        keys.isPressed(ak.keys.right)) {
+      this.currentState = 'up-right';
     } else if (keys.isPressed(ak.keys.up)) {
       this.currentState = 'up';
     } else if (keys.isPressed(ak.keys.down)) {
@@ -77,7 +87,9 @@ class Player {
       'right',
       'left',
       'down-left',
-      'down-right'
+      'down-right',
+      'up-left',
+      'up-right'
     ].indexOf(this.currentState);
 
     return this.sourceWidth * (this.numberOfSteps * val);
@@ -115,19 +127,23 @@ class Player {
   }
 
   draw(renderer) {
-    renderer.save();
-    renderer.translate(this.x, this.y);
-    renderer.drawImage(
-      this.image,
-      this.sourceLocation.x,
-      this.sourceLocation.y,
-      this.sourceWidth,
-      this.sourceHeight,
-      (-this.drawWidth/2),
-      (-this.drawHeight/2),
-      this.drawWidth,
-      this.drawHeight);
-    renderer.restore();
+    renderer.render(() => {
+      let translation =
+        renderer.translation(this.x, 0, this.z);
+      console.dir(translation);
+      renderer.translate(translation.x, translation.y)
+      renderer.drawImage(
+        this.image,
+        this.sourceLocation.x,
+        this.sourceLocation.y,
+        this.sourceWidth,
+        this.sourceHeight,
+        (-this.drawWidth/2),
+        (-this.drawHeight/2),
+        this.drawWidth,
+        this.drawHeight);
+      renderer.restore();
+    });
   }
 }
 
